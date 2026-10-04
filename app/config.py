@@ -7,7 +7,8 @@ load_dotenv()
 
 class Settings:
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-    GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+    GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
+    GROQ_GUARD_MODEL = os.getenv("GROQ_GUARD_MODEL", "openai/gpt-oss-20b")
     QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
     QDRANT_URL = os.getenv("QDRANT_URL") or os.getenv("QDRANT_cluster_endpoint")
     QDRANT_COLLECTION = os.getenv("QDRANT_COLLECTION", "uday")

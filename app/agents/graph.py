@@ -20,7 +20,7 @@ def route_planner(state: AgentState):
     """
     Routes the workflow based on the planner's decision.
     """
-    if state.get("route") == "CONVERSATIONAL":
+    if state["route"] == "CONVERSATIONAL":
         return "responder"
     return "retriever"
 
