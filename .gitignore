@@ -4,3 +4,5 @@ venv/
 __pycache__/
 *.pyc
 .vscode/
+processed_data/
+requirements.freeze.txt

@@ -2,33 +2,47 @@ import logfire
 from typing import List
 
 
-def chunk_text(text: str, chunk_size: int = 1000) -> List[str]:
+def chunk_text(
+    text: str,
+    chunk_size: int = 1000,
+    overlap: int = 150,
+) -> List[str]:
     """
-    Splits the input text into chunks of specified size with a specified overlap.
+    Splits text into overlapping character-based chunks.
 
     Args:
-        text (str): The input text to be chunked.
-        chunk_size (int): The maximum size of each chunk.
+        text: Input text.
+        chunk_size: Maximum characters per chunk.
+        overlap: Number of characters shared between consecutive chunks.
 
     Returns:
-        List[str]: A list of text chunks.
+        List of non-empty text chunks.
     """
-    with logfire.span("Chunking text", text_length=len(text), chunk_size=chunk_size):
-        if text.strip() :
+    with logfire.span(
+        "Chunking text",
+        text_length=len(text),
+        chunk_size=chunk_size,
+        overlap=overlap,
+    ):
+        if not text.strip():
             return []
-        paragraphs=text.split("\n\n")
+
+        text = text.strip()
         chunks = []
-        current_chunk = ""
-        for paragraph in paragraphs:
-            if len(current_chunk) + len(paragraph) + 2 <= chunk_size:
-                current_chunk += paragraph + "\n\n"
-            else:
-                if current_chunk:
-                    chunks.append(current_chunk.rstrip("\n\n"))
-                current_chunk = paragraph + "\n\n"
-        if current_chunk:
-            chunks.append(current_chunk.rstrip("\n\n"))
-            valid_chunks = [chunk for chunk in chunks if chunk.strip()]
-        return valid_chunks
-    
-    
+
+        start = 0
+        text_length = len(text)
+
+        while start < text_length:
+            end = min(start + chunk_size, text_length)
+            chunk = text[start:end].strip()
+
+            if chunk:
+                chunks.append(chunk)
+
+            if end >= text_length:
+                break
+
+            start = end - overlap
+
+        return chunks
